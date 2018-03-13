@@ -2,10 +2,13 @@
 <resources>
     <color name="colorPrimary">#000066</color>
     <color name="colorPrimaryDark">#202020</color>
-    <color name="colorAccent">#000099</color>
+    <color name="colorAccent">#00CC00</color>
 
     <color name="btnSignUp">#0080FF</color>
     <color name="btnSignActive">#00CCCC</color>
+
+    <color name="overlayBackground">#7f333639</color>
+    <color name="overlayActionBar">#0e0d0e</color>
 
 
 </resources>
