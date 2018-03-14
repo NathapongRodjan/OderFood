@@ -4,12 +4,16 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.nathapong.oderfood.Database.Database;
 import com.example.nathapong.oderfood.Model.Food;
+import com.example.nathapong.oderfood.Model.Order;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +32,8 @@ public class FoodDetail extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference food;
+
+    Food currentFood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,21 @@ public class FoodDetail extends AppCompatActivity {
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpendeddAppbar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppbar);
 
+        btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Database(getBaseContext()).addTOCart(new Order(
+                        foodId,
+                        currentFood.getName(),
+                        numberButton.getNumber(),
+                        currentFood.getPrice(),
+                        currentFood.getDiscount()
+                ));
+
+                Toast.makeText(FoodDetail.this, "Added to Cart !", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         // Get FoodId from Intent
         if (getIntent() != null)
@@ -69,18 +90,18 @@ public class FoodDetail extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Food food = dataSnapshot.getValue(Food.class);
+                currentFood = dataSnapshot.getValue(Food.class);
 
                 Glide
                         .with(FoodDetail.this)
-                        .load(food.getImage())
+                        .load(currentFood.getImage())
                         .into(img_food);
 
-                collapsingToolbarLayout.setTitle(food.getName());
+                collapsingToolbarLayout.setTitle(currentFood.getName());
 
-                food_name.setText(food.getName());
-                food_price.setText(food.getPrice());
-                food_description.setText(food.getDescription());
+                food_name.setText(currentFood.getName());
+                food_price.setText(currentFood.getPrice());
+                food_description.setText(currentFood.getDescription());
 
             }
 
