@@ -58,15 +58,28 @@ public class Cart extends AppCompatActivity {
         txtTotalPrice = (TextView)findViewById(R.id.total);
         btnPlaceOrder = (Button)findViewById(R.id.btnPlaceOrder);
 
+
+        loadListFood();  // Load List Order in Cart
+
+
         btnPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                showAlertDialog();
+                if (txtTotalPrice.getText().toString() != ""){
+                    showAlertDialog();
+                }
+                else {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(Cart.this);
+                    alertDialog.setTitle("ท่านไม่มีรายการในรถเข็น !");
+                    alertDialog.setMessage("กรุณาเลือกรายการอาหารที่สนใจ...");
+                    alertDialog.setIcon(R.drawable.ic_remove_shopping_cart_black_24dp);
+                    alertDialog.show();
+
+
+                }
             }
         });
-
-        loadListFood();
     }
 
     private void showAlertDialog() {
