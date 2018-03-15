@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.nathapong.oderfood.Common.Common;
 import com.example.nathapong.oderfood.Interface.ItemClickListener;
 import com.example.nathapong.oderfood.Model.Food;
 import com.example.nathapong.oderfood.ViewHolder.FoodViewHolder;
@@ -61,7 +62,13 @@ public class FoodList extends AppCompatActivity {
 
         if (!CategoryId.isEmpty() && CategoryId != null){
 
-            loadListFood(CategoryId);
+            if (Common.isConnectedToInternet(getBaseContext())) {
+                loadListFood(CategoryId);
+            }
+            else {
+                Toast.makeText(FoodList.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
         // Search

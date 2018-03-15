@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.nathapong.oderfood.Common.Common;
 import com.example.nathapong.oderfood.Database.Database;
 import com.example.nathapong.oderfood.Model.Food;
 import com.example.nathapong.oderfood.Model.Order;
@@ -78,7 +79,13 @@ public class FoodDetail extends AppCompatActivity {
             foodId = getIntent().getStringExtra("FoodId");
         if (!foodId.isEmpty()){
 
-            getDetailFood(foodId);
+            if (Common.isConnectedToInternet(getBaseContext())) {
+                getDetailFood(foodId);
+            }
+            else {
+                Toast.makeText(FoodDetail.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
 

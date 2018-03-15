@@ -87,8 +87,13 @@ public class Home extends AppCompatActivity
         layoutManager = new LinearLayoutManager(Home.this);
         recycler_menu.setLayoutManager(layoutManager);
 
-        loadMenu();
-
+        if (Common.isConnectedToInternet(getBaseContext())) {
+            loadMenu();
+        }
+        else {
+            Toast.makeText(Home.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     private void loadMenu() {
@@ -144,6 +149,13 @@ public class Home extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        switch (item.getItemId()){
+
+            case R.id.refresh:
+                loadMenu();
+                break;
+
+        }
         return super.onOptionsItemSelected(item);
     }
 

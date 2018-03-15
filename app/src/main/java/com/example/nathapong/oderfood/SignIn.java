@@ -38,50 +38,57 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // Check Internet Connection
+                if (Common.isConnectedToInternet(getBaseContext())) {
 
-                final ProgressDialog mDialog = new ProgressDialog(SignIn.this);
-                mDialog.setMessage("Please waiting...");
-                mDialog.show();
+                    final ProgressDialog mDialog = new ProgressDialog(SignIn.this);
+                    mDialog.setMessage("Please waiting...");
+                    mDialog.show();
 
-                table_user.addValueEventListener(new ValueEventListener() {
+                    table_user.addValueEventListener(new ValueEventListener() {
 
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                        // Check if user not exist in database
-                        if (dataSnapshot.child(edtPhone.getText().toString()).exists()) {
-
-                            //Get User information
-                            mDialog.dismiss();
-                            User user = dataSnapshot.child(edtPhone.getText().toString()).getValue(User.class);
-                            user.setPhone(edtPhone.getText().toString()); // Set Phone (Phone is a key)
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                            if (user.getPassword().equals(edtPassword.getText().toString())) {
+                            // Check if user not exist in database
+                            if (dataSnapshot.child(edtPhone.getText().toString()).exists()) {
 
-                                Intent homeIntent = new Intent(SignIn.this, Home.class);
-                                Common.currentUser = user;
-                                startActivity(homeIntent);
-                                finish();
+                                //Get User information
+                                mDialog.dismiss();
+                                User user = dataSnapshot.child(edtPhone.getText().toString()).getValue(User.class);
+                                user.setPhone(edtPhone.getText().toString()); // Set Phone (Phone is a key)
 
+
+                                if (user.getPassword().equals(edtPassword.getText().toString())) {
+
+                                    Intent homeIntent = new Intent(SignIn.this, Home.class);
+                                    Common.currentUser = user;
+                                    startActivity(homeIntent);
+                                    finish();
+
+                                } else {
+                                    Toast.makeText(SignIn.this, "Wrong Password !", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                Toast.makeText(SignIn.this, "Wrong Password !", Toast.LENGTH_SHORT).show();
+                                mDialog.dismiss();
+                                Toast.makeText(SignIn.this, "User not exist in Database !", Toast.LENGTH_SHORT).show();
                             }
-                        }
-                        else {
-                            mDialog.dismiss();
-                            Toast.makeText(SignIn.this, "User not exist in Database !", Toast.LENGTH_SHORT).show();
+
                         }
 
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(SignIn.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
+
         });
     }
 }

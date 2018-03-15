@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.nathapong.oderfood.Common.Common;
 import com.example.nathapong.oderfood.Model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,40 +40,46 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final ProgressDialog mDialog = new ProgressDialog(SignUp.this);
-                mDialog.setMessage("Please waiting...");
-                mDialog.show();
+                if (Common.isConnectedToInternet(getBaseContext())) {
+
+                    final ProgressDialog mDialog = new ProgressDialog(SignUp.this);
+                    mDialog.setMessage("Please waiting...");
+                    mDialog.show();
 
 
-                // Use addListenerForSingleValueEvent instead of addValueEventListener
-                table_user.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Use addListenerForSingleValueEvent instead of addValueEventListener
+                    table_user.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                         //Check if already user's phone
-                        if (dataSnapshot.child(edtPhone.getText().toString()).exists()){
+                            //Check if already user's phone
+                            if (dataSnapshot.child(edtPhone.getText().toString()).exists()) {
 
-                            mDialog.dismiss();
-                            Toast.makeText(SignUp.this, "Phone number already register !", Toast.LENGTH_SHORT).show();
+                                mDialog.dismiss();
+                                Toast.makeText(SignUp.this, "Phone number already register !", Toast.LENGTH_SHORT).show();
+                            } else {
+                                mDialog.dismiss();
+
+                                User user = new User(edtName.getText().toString(), edtPassword.getText().toString());
+
+                                table_user.child(edtPhone.getText().toString()).setValue(user);
+
+                                Toast.makeText(SignUp.this, "Sign up successfully !", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+
                         }
-                        else {
-                            mDialog.dismiss();
 
-                            User user = new User(edtName.getText().toString(), edtPassword.getText().toString());
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                            table_user.child(edtPhone.getText().toString()).setValue(user);
-
-                            Toast.makeText(SignUp.this, "Sign up successfully !", Toast.LENGTH_SHORT).show();
-                            finish();
                         }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                    });
+                }
+                else {
+                    Toast.makeText(SignUp.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         });
     }
