@@ -83,6 +83,7 @@ public class FoodList extends AppCompatActivity {
                     }
                     else {
                         Toast.makeText(FoodList.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);   // Disable refresh ring
                         return;
                     }
                 }

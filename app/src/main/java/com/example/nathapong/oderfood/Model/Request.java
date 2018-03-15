@@ -14,19 +14,21 @@ public class Request {
     private String total;
     private String status;
     private String comment;
+    private String latlng;
     private List<Order> foods;   // List of food order
 
 
     public Request() {
     }
 
-    public Request(String phone, String name, String address, String total, String status, String comment, List<Order> foods) {
+    public Request(String phone, String name, String address, String total, String status, String comment, String latlng, List<Order> foods) {
         this.phone = phone;
         this.name = name;
         this.address = address;
         this.total = total;
         this.status = status;
         this.comment = comment;
+        this.latlng = latlng;
         this.foods = foods;
     }
 
@@ -76,6 +78,14 @@ public class Request {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getLatlng() {
+        return latlng;
+    }
+
+    public void setLatlng(String latlng) {
+        this.latlng = latlng;
     }
 
     public List<Order> getFoods() {
