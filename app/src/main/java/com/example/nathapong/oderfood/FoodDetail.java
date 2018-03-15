@@ -11,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andremion.counterfab.CounterFab;
 import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.nathapong.oderfood.Common.Common;
@@ -34,7 +35,8 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
     TextView food_name, food_price, food_description;
     ImageView img_food;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    FloatingActionButton btnCart, btnRating;
+    FloatingActionButton btnRating;
+    CounterFab btnCart;
     ElegantNumberButton numberButton;
     RatingBar ratingBar;
 
@@ -57,7 +59,7 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
 
         // Init View Object
         numberButton = (ElegantNumberButton)findViewById(R.id.number_button);
-        btnCart = (FloatingActionButton)findViewById(R.id.btncart);
+        btnCart = (CounterFab) findViewById(R.id.btncart);
         btnRating = (FloatingActionButton)findViewById(R.id.btn_rating);
         ratingBar = (RatingBar)findViewById(R.id.ratingBar);
         img_food = (ImageView) findViewById(R.id.img_food);
@@ -86,9 +88,12 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
                         currentFood.getDiscount()
                 ));
 
-                Toast.makeText(FoodDetail.this, "Added to Cart !", Toast.LENGTH_SHORT).show();
+                btnCart.setCount(new Database(FoodDetail.this).getCountCart());
+                Toast.makeText(FoodDetail.this, "เพิ่มในรถเข็นแล้ว !", Toast.LENGTH_SHORT).show();
             }
         });
+
+        btnCart.setCount(new Database(this).getCountCart());
 
 
         // Get FoodId from Intent

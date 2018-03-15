@@ -1,6 +1,7 @@
 package com.example.nathapong.oderfood.ViewHolder;
 
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ public class FoodViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     public TextView txtFoodName;
     public ImageView imgFood;
+    public FloatingActionButton btn_quick_cart;
 
     // Interface
     private ItemClickListener itemClickListener;
@@ -31,6 +33,7 @@ public class FoodViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
         txtFoodName = (TextView)itemView.findViewById(R.id.food_name);
         imgFood = (ImageView)itemView.findViewById(R.id.food_image);
+        btn_quick_cart = (FloatingActionButton)itemView.findViewById(R.id.btn_quick_cart);
 
         itemView.setOnClickListener(this);
     }

@@ -37,7 +37,7 @@ public class Cart extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
 
-    TextView txtTotalPrice;
+    public TextView txtTotalPrice;
     Button btnPlaceOrder;
 
     List<Order> cart = new ArrayList<>();
@@ -145,7 +145,7 @@ public class Cart extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void loadListFood() {
+    public void loadListFood() {
 
         cart = new Database(this).getCarts();
         adapter = new CartAdapter(cart,this);

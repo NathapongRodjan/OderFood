@@ -18,8 +18,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andremion.counterfab.CounterFab;
 import com.bumptech.glide.Glide;
 import com.example.nathapong.oderfood.Common.Common;
+import com.example.nathapong.oderfood.Database.Database;
 import com.example.nathapong.oderfood.Interface.ItemClickListener;
 import com.example.nathapong.oderfood.Model.Category;
 import com.example.nathapong.oderfood.ViewHolder.MenuViewHolder;
@@ -42,6 +44,8 @@ public class Home extends AppCompatActivity
 
     FirebaseRecyclerAdapter<Category, MenuViewHolder> adapter;
 
+    CounterFab fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +60,7 @@ public class Home extends AppCompatActivity
         category = database.getReference("Category");
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (CounterFab) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,6 +68,10 @@ public class Home extends AppCompatActivity
                 startActivity(cartIntent);
             }
         });
+
+        fab.setCount(new Database(this).getCountCart());
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -184,5 +192,14 @@ public class Home extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fab.setCount(new Database(this).getCountCart());
+
+
     }
 }

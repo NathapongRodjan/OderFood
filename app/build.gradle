@@ -48,6 +48,8 @@ dependencies {
 
     implementation 'com.stepstone.apprating:app-rating:2.0.0'
 
+    implementation 'com.github.andremion:counterfab:1.0.1'
+
 }
 
 

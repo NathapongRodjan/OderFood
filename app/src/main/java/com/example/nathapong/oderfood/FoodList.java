@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.nathapong.oderfood.Common.Common;
+import com.example.nathapong.oderfood.Database.Database;
 import com.example.nathapong.oderfood.Interface.ItemClickListener;
 import com.example.nathapong.oderfood.Model.Food;
+import com.example.nathapong.oderfood.Model.Order;
 import com.example.nathapong.oderfood.ViewHolder.FoodViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -63,6 +65,7 @@ public class FoodList extends AppCompatActivity {
         if (!CategoryId.isEmpty() && CategoryId != null){
 
             if (Common.isConnectedToInternet(getBaseContext())) {
+
                 loadListFood(CategoryId);
             }
             else {
@@ -193,14 +196,31 @@ public class FoodList extends AppCompatActivity {
                 (Food.class, R.layout.food_item, FoodViewHolder.class,
                         Foods.orderByChild("MenuId").equalTo(categoryId)) {
             @Override
-            protected void populateViewHolder(FoodViewHolder viewHolder, Food model, int position) {
+            protected void populateViewHolder(FoodViewHolder viewHolder, final Food model, final int position) {
 
-                viewHolder.txtFoodName.setText(model.getName());
+                viewHolder.txtFoodName.setText(model.getName() + " : " + model.getPrice() + " บาท");
 
                 Glide
                         .with(FoodList.this)
                         .load(model.getImage())
                         .into(viewHolder.imgFood);
+
+                viewHolder.btn_quick_cart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        new Database(getBaseContext()).addTOCart(new Order(
+                                adapter.getRef(position).getKey(),
+                                model.getName(),
+                                "1",     // Only quick cart
+                                model.getPrice(),
+                                model.getDiscount()
+                        ));
+
+                        Toast.makeText(FoodList.this, "เพิ่มในรถเข็นแล้ว !", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
                 final Food local = model;
                 viewHolder.setItemClickListener(new ItemClickListener() {

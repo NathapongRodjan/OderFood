@@ -27,19 +27,34 @@
             android:scaleType="centerCrop"
             android:src="@drawable/my_bg" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_quick_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/holo_green_light"
+            android:elevation="6dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_add_shopping_cart_black_24dp"
+            app:layout_anchor="@id/app_bar_layout"
+            app:layout_anchorGravity="bottom|right|end"
+            app:pressedTranslationZ="0dp"
+            app:useCompatPadding="true"
+
+            />
+
         <TextView
             android:id="@+id/food_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_weight="1"
             android:background="#4f0e0d0e"
             android:gravity="center"
             android:text="Name of food"
             android:textColor="@android:color/white"
-            android:textSize="24dp"
-
-
-            />
+            android:textSize="24dp" />
 
 
     </RelativeLayout>
