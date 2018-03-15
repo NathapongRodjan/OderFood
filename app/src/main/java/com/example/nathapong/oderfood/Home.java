@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -46,6 +47,8 @@ public class Home extends AppCompatActivity
 
     CounterFab fab;
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,40 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
         setSupportActionBar(toolbar);
+
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_layout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (Common.isConnectedToInternet(getBaseContext())) {
+                    loadMenu();
+                }
+                else {
+                    Toast.makeText(Home.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        });
+
+        // Load for first time
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (Common.isConnectedToInternet(getBaseContext())) {
+                    loadMenu();
+                }
+                else {
+                    Toast.makeText(Home.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        });
 
         //Init Firebase
         database = FirebaseDatabase.getInstance();
@@ -95,13 +132,7 @@ public class Home extends AppCompatActivity
         layoutManager = new LinearLayoutManager(Home.this);
         recycler_menu.setLayoutManager(layoutManager);
 
-        if (Common.isConnectedToInternet(getBaseContext())) {
-            loadMenu();
-        }
-        else {
-            Toast.makeText(Home.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
-            return;
-        }
+
     }
 
     private void loadMenu() {
@@ -135,6 +166,7 @@ public class Home extends AppCompatActivity
         };
 
         recycler_menu.setAdapter(adapter);
+        swipeRefreshLayout.setRefreshing(false);   // Disable refresh ring
     }
 
     @Override

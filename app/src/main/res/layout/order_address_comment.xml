@@ -21,7 +21,7 @@
             android:id="@+id/edtAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="กรุากรอกที่อยู่..."
+            android:hint="กรุณากรอกที่อยู่..."
             android:textColorHint="@color/colorPrimary"
             android:text=""
             android:textColor="@color/colorPrimary"

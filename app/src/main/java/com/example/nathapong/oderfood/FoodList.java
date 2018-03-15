@@ -1,6 +1,7 @@
 package com.example.nathapong.oderfood;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,6 +46,8 @@ public class FoodList extends AppCompatActivity {
     List<String> suggestList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,21 +61,57 @@ public class FoodList extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(FoodList.this);
         recyclerView.setLayoutManager(layoutManager);
 
-        // Get Intent here
-        if (getIntent() != null)
-            CategoryId = getIntent().getStringExtra("CategoryId");
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_layout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
 
-        if (!CategoryId.isEmpty() && CategoryId != null){
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
 
-            if (Common.isConnectedToInternet(getBaseContext())) {
+                // Get Intent here
+                if (getIntent() != null)
+                    CategoryId = getIntent().getStringExtra("CategoryId");
 
-                loadListFood(CategoryId);
+                if (!CategoryId.isEmpty() && CategoryId != null){
+
+                    if (Common.isConnectedToInternet(getBaseContext())) {
+
+                        loadListFood(CategoryId);
+                    }
+                    else {
+                        Toast.makeText(FoodList.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
             }
-            else {
-                Toast.makeText(FoodList.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
-                return;
+        });
+
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                // Get Intent here
+                if (getIntent() != null)
+                    CategoryId = getIntent().getStringExtra("CategoryId");
+
+                if (!CategoryId.isEmpty() && CategoryId != null){
+
+                    if (Common.isConnectedToInternet(getBaseContext())) {
+
+                        loadListFood(CategoryId);
+                    }
+                    else {
+                        Toast.makeText(FoodList.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
             }
-        }
+        });
+
+
 
         // Search
         materialSearchBar = (MaterialSearchBar)findViewById(R.id.searchBar);
@@ -214,7 +253,8 @@ public class FoodList extends AppCompatActivity {
                                 model.getName(),
                                 "1",     // Only quick cart
                                 model.getPrice(),
-                                model.getDiscount()
+                                model.getDiscount(),
+                                model.getImage()
                         ));
 
                         Toast.makeText(FoodList.this, "เพิ่มในรถเข็นแล้ว !", Toast.LENGTH_SHORT).show();
@@ -239,6 +279,8 @@ public class FoodList extends AppCompatActivity {
         // Set Adapter
         Log.d("TAG", "Number of Item is "+adapter.getItemCount());
         recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout.setRefreshing(false);  // Disable refresh ring
 
     }
 }

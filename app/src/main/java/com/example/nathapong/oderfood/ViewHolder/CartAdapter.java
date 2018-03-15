@@ -13,10 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.nathapong.oderfood.Cart;
 import com.example.nathapong.oderfood.Common.Common;
 import com.example.nathapong.oderfood.Database.Database;
+import com.example.nathapong.oderfood.Home;
 import com.example.nathapong.oderfood.Interface.ItemClickListener;
 import com.example.nathapong.oderfood.Model.Order;
 import com.example.nathapong.oderfood.R;
@@ -31,6 +33,7 @@ class CartViewHolder extends RecyclerView.ViewHolder
 
     public TextView txtCartName, txtPrice;
     public ElegantNumberButton btn_quantity;
+    public ImageView cart_image;
 
     private ItemClickListener itemClickListener;
 
@@ -49,6 +52,7 @@ class CartViewHolder extends RecyclerView.ViewHolder
         txtCartName = (TextView)itemView.findViewById(R.id.cart_item_name);
         txtPrice = (TextView)itemView.findViewById(R.id.cart_item_price);
         btn_quantity = (ElegantNumberButton)itemView.findViewById(R.id.btn_quantity);
+        cart_image = (ImageView) itemView.findViewById(R.id.cart_image);
 
         itemView.setOnCreateContextMenuListener(this);
     }
@@ -91,9 +95,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
     @Override
     public void onBindViewHolder(final CartViewHolder holder, final int position) {
 
-        /*TextDrawable drawable = TextDrawable.builder()
-                .buildRound(""+listData.get(position).getQuantity(), Color.RED);
-        holder.imgCartCount.setImageDrawable(drawable);*/
+
+        Glide
+                .with(cart.getBaseContext())
+                .load(listData.get(position).getImage())
+                .into(holder.cart_image);
 
         holder.btn_quantity.setNumber(listData.get(position).getQuantity());
 
