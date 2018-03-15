@@ -1,11 +1,13 @@
 package com.example.nathapong.oderfood;
 
+import android.app.DownloadManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,24 +17,32 @@ import com.example.nathapong.oderfood.Common.Common;
 import com.example.nathapong.oderfood.Database.Database;
 import com.example.nathapong.oderfood.Model.Food;
 import com.example.nathapong.oderfood.Model.Order;
+import com.example.nathapong.oderfood.Model.Rating;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.stepstone.apprating.AppRatingDialog;
+import com.stepstone.apprating.listener.RatingDialogListener;
 
-public class FoodDetail extends AppCompatActivity {
+import java.util.Arrays;
+
+public class FoodDetail extends AppCompatActivity implements RatingDialogListener{
 
     TextView food_name, food_price, food_description;
     ImageView img_food;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    FloatingActionButton btnCart;
+    FloatingActionButton btnCart, btnRating;
     ElegantNumberButton numberButton;
+    RatingBar ratingBar;
 
     String foodId = "";
 
     FirebaseDatabase database;
-    DatabaseReference food;
+    DatabaseReference food;        // For access food in Firebase
+    DatabaseReference ratingRef;   // For access rating in Firebase
 
     Food currentFood;
 
@@ -43,20 +53,27 @@ public class FoodDetail extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         food = database.getReference("Food");
+        ratingRef = database.getReference("Rating");
 
-        // Init View
+        // Init View Object
         numberButton = (ElegantNumberButton)findViewById(R.id.number_button);
         btnCart = (FloatingActionButton)findViewById(R.id.btncart);
-
+        btnRating = (FloatingActionButton)findViewById(R.id.btn_rating);
+        ratingBar = (RatingBar)findViewById(R.id.ratingBar);
         img_food = (ImageView) findViewById(R.id.img_food);
-
         food_name = (TextView)findViewById(R.id.food_name);
         food_description = (TextView)findViewById(R.id.food_description);
         food_price = (TextView)findViewById(R.id.food_price);
-
         collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsing);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpendeddAppbar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppbar);
+
+        btnRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRatingDialog();
+            }
+        });
 
         btnCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +98,7 @@ public class FoodDetail extends AppCompatActivity {
 
             if (Common.isConnectedToInternet(getBaseContext())) {
                 getDetailFood(foodId);
+                getRatingFood(foodId);
             }
             else {
                 Toast.makeText(FoodDetail.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
@@ -88,6 +106,57 @@ public class FoodDetail extends AppCompatActivity {
             }
         }
 
+
+    }
+
+    private void getRatingFood(final String foodId) {
+
+        Query foodRating = ratingRef.orderByChild("foodId").equalTo(foodId);
+
+        foodRating.addValueEventListener(new ValueEventListener() {
+
+            int count = 0, sum = 0;  //For calculate rating average
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+
+                    Rating item = postSnapshot.getValue(Rating.class);
+                    sum += Integer.parseInt(item.getRateValue());
+                    count++;
+                }
+                if (count != 0){
+                    float average = sum / count;
+                    ratingBar.setRating(average);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void showRatingDialog() {
+
+        new AppRatingDialog.Builder()
+                .setPositiveButtonText("ส่ง")
+                .setNegativeButtonText("ยกเลิก")
+                .setNoteDescriptions(Arrays.asList("แย่","พอใช้","ปานกลาง","ดี","ดีมาก"))
+                .setDefaultRating(1)
+                .setTitle("ความพึงพอใจ")
+                .setDescription("กรุณาให้คะแนนดาว และส่งความคิดเห็นของท่าน")
+                .setTitleTextColor(R.color.colorPrimary)
+                .setDescriptionTextColor(R.color.colorPrimary)
+                .setHint("กรุณาเขียนความคิดเห็น...")
+                .setHintTextColor(R.color.colorAccent)
+                .setCommentTextColor(android.R.color.white)
+                .setCommentBackgroundColor(R.color.colorPrimaryDark)
+                .setWindowAnimation(R.style.RatingDialogFadeAnimate)
+                .create(FoodDetail.this)
+                .show();
 
     }
 
@@ -117,5 +186,47 @@ public class FoodDetail extends AppCompatActivity {
 
             }
         });
+    }
+
+
+
+    @Override
+    public void onPositiveButtonClicked(int rateValue, String comment) {
+
+        // Get Rating and upload to Firebase
+        final Rating rating = new Rating
+                (Common.currentUser.getPhone(), foodId, String.valueOf(rateValue), comment);
+
+        final String ID_Rating = ratingRef.push().getKey();
+
+        ratingRef.child(ID_Rating).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.child(ID_Rating).exists()){
+
+                    // Remove old Value
+                    ratingRef.child(ID_Rating).removeValue();
+
+                    // Update new Value
+                    ratingRef.child(ID_Rating).setValue(rating);
+                }
+                else {
+                    // Update new Value
+                    ratingRef.child(ID_Rating).setValue(rating);
+                }
+                Toast.makeText(FoodDetail.this, "ขอบคุณสำหรับความคิดเห็นของท่าน", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onNegativeButtonClicked() {
+
     }
 }
