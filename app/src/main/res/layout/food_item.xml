@@ -12,31 +12,34 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
 
 
         <ImageView
             android:id="@+id/food_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/my_bg"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/my_bg" />
 
         <TextView
             android:id="@+id/food_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#4f0e0d0e"
+            android:gravity="center"
             android:text="Name of food"
             android:textColor="@android:color/white"
-            android:background="#4f0e0d0e"
-            android:textSize="20dp"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-
+            android:textSize="24dp"
 
 
             />
-
 
 
     </RelativeLayout>

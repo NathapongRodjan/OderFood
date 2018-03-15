@@ -197,23 +197,23 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
         final Rating rating = new Rating
                 (Common.currentUser.getPhone(), foodId, String.valueOf(rateValue), comment);
 
-        final String ID_Rating = ratingRef.push().getKey();
+        final String Key_Rating = ratingRef.push().getKey(); // Create auto Key
 
-        ratingRef.child(ID_Rating).addListenerForSingleValueEvent(new ValueEventListener() {
+        ratingRef.child(Key_Rating).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.child(ID_Rating).exists()){
+                if (dataSnapshot.child(Key_Rating).exists()){
 
                     // Remove old Value
-                    ratingRef.child(ID_Rating).removeValue();
+                    ratingRef.child(Key_Rating).removeValue();
 
                     // Update new Value
-                    ratingRef.child(ID_Rating).setValue(rating);
+                    ratingRef.child(Key_Rating).setValue(rating);
                 }
                 else {
                     // Update new Value
-                    ratingRef.child(ID_Rating).setValue(rating);
+                    ratingRef.child(Key_Rating).setValue(rating);
                 }
                 Toast.makeText(FoodDetail.this, "ขอบคุณสำหรับความคิดเห็นของท่าน", Toast.LENGTH_SHORT).show();
             }
