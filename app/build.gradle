@@ -55,18 +55,7 @@ dependencies {
     // SQLite
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
 
-
-
-
-
 }
-
-
-
-
-
-
-
 
 
 apply plugin: 'com.google.gms.google-services'

@@ -102,7 +102,8 @@ public class FoodList extends AppCompatActivity {
 
                     if (Common.isConnectedToInternet(getBaseContext())) {
 
-                        loadListFood(CategoryId);
+                        loadListFood(CategoryId);  // Load List of foods
+                        loadSuggest(CategoryId);   // Load List of Suggestions in Search Bar
                     }
                     else {
                         Toast.makeText(FoodList.this,"โปรดตรวจสอบการเชื่อมต่ออินเตอร์เน็ต !",Toast.LENGTH_SHORT).show();
@@ -117,8 +118,7 @@ public class FoodList extends AppCompatActivity {
         // Search
         materialSearchBar = (MaterialSearchBar)findViewById(R.id.searchBar);
         materialSearchBar.setHint("ใส่ชื่อเมนูที่ท่านต้องการ...");
-
-        loadSuggest();
+        //materialSearchBar.setSpeechMode(false);
 
         materialSearchBar.setLastSuggestions(suggestList);
         materialSearchBar.setCardViewElevation(10);
@@ -210,9 +210,10 @@ public class FoodList extends AppCompatActivity {
 
 
 
-    private void loadSuggest() {
+    private void loadSuggest(String categoryId) {
+        
 
-        Foods.orderByChild("MenuId").equalTo(CategoryId).addValueEventListener(new ValueEventListener() {
+        Foods.orderByChild("MenuId").equalTo(categoryId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -231,6 +232,7 @@ public class FoodList extends AppCompatActivity {
     }
 
     private void loadListFood(String categoryId){
+
 
         adapter = new FirebaseRecyclerAdapter<Food, FoodViewHolder>
                 (Food.class, R.layout.food_item, FoodViewHolder.class,
