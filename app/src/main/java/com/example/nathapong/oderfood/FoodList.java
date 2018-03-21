@@ -211,7 +211,7 @@ public class FoodList extends AppCompatActivity {
 
 
     private void loadSuggest(String categoryId) {
-        
+
 
         Foods.orderByChild("MenuId").equalTo(categoryId).addValueEventListener(new ValueEventListener() {
             @Override

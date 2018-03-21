@@ -27,6 +27,7 @@ import com.example.nathapong.oderfood.Interface.ItemClickListener;
 import com.example.nathapong.oderfood.Model.Category;
 import com.example.nathapong.oderfood.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,6 +38,7 @@ public class Home extends AppCompatActivity
 
     FirebaseDatabase database;
     DatabaseReference category;
+    private FirebaseAuth myFirebaseAuth;
 
     TextView txtFullName;
 
@@ -57,6 +59,8 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
         setSupportActionBar(toolbar);
+
+        myFirebaseAuth = FirebaseAuth.getInstance();
 
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_layout);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
@@ -124,7 +128,8 @@ public class Home extends AppCompatActivity
         //Set Name of user
         View headerView = navigationView.getHeaderView(0);
         txtFullName = (TextView)headerView.findViewById(R.id.txtFullName);
-        txtFullName.setText(Common.currentUser.getName());
+        //txtFullName.setText(Common.currentUser.getName());
+        txtFullName.setText(myFirebaseAuth.getCurrentUser().getDisplayName());
 
 
         //Load Menu
@@ -132,7 +137,6 @@ public class Home extends AppCompatActivity
         recycler_menu.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(Home.this);
         recycler_menu.setLayoutManager(layoutManager);
-
 
     }
 
@@ -217,9 +221,17 @@ public class Home extends AppCompatActivity
             startActivity(orderIntent);
 
         } else if (id == R.id.nav_log_out) {
-            Intent signInIntent = new Intent(Home.this, SignIn.class);
-            signInIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(signInIntent);
+
+            //Intent signInIntent = new Intent(Home.this, SignIn.class);
+            //signInIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //startActivity(signInIntent);
+
+            myFirebaseAuth.signOut();
+
+            Intent intent = new Intent(Home.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
