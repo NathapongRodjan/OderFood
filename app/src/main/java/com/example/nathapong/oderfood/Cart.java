@@ -195,6 +195,7 @@ public class Cart extends AppCompatActivity {
             }
         });
 
+        // Remove Fragment when close dialog for prevent app crash when tap back press button
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -207,7 +208,7 @@ public class Cart extends AppCompatActivity {
 
         alertDialog.show();
     }
-    
+
 
     public void loadListFood() {
 
