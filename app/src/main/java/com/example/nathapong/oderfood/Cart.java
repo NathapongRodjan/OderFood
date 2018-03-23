@@ -1,5 +1,6 @@
 package com.example.nathapong.oderfood;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -118,8 +119,6 @@ public class Cart extends AppCompatActivity {
         LayoutInflater inflater = this.getLayoutInflater();
         View order_address_comment = inflater.inflate(R.layout.order_address_comment,null);
 
-        //final MaterialEditText edtAddress = (MaterialEditText)order_address_comment.findViewById(R.id.edtAddress);
-
         PlaceAutocompleteFragment edtAddress =(PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
         // Hide search icon before fragment
@@ -196,8 +195,19 @@ public class Cart extends AppCompatActivity {
             }
         });
 
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+
+                getFragmentManager().beginTransaction()
+                        .remove(getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment))
+                        .commit();
+            }
+        });
+
         alertDialog.show();
     }
+    
 
     public void loadListFood() {
 
