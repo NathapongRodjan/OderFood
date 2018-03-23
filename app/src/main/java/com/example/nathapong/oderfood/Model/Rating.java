@@ -3,27 +3,40 @@ package com.example.nathapong.oderfood.Model;
 
 public class Rating {
 
-    private String userPhone;
+    private String userEmail;
+    private String userName;
     private String foodId;
     private String rateValue;
     private String comment;
+    private String date;
 
     public Rating() {
     }
 
-    public Rating(String userPhone, String foodId, String rateValue, String comment) {
-        this.userPhone = userPhone;
+    public Rating(String userEmail, String userName, String foodId, String rateValue, String comment, String date) {
+        this.userEmail = userEmail;
+        this.userName = userName;
         this.foodId = foodId;
         this.rateValue = rateValue;
         this.comment = comment;
+        this.date = date;
     }
 
-    public String getUserPhone() {
-        return userPhone;
+
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getFoodId() {
@@ -48,5 +61,13 @@ public class Rating {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

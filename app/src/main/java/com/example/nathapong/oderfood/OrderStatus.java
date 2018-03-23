@@ -9,6 +9,7 @@ import com.example.nathapong.oderfood.Common.Common;
 import com.example.nathapong.oderfood.Model.Request;
 import com.example.nathapong.oderfood.ViewHolder.OrderViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,6 +25,7 @@ public class OrderStatus extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference reference;
+    FirebaseAuth myFirebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +34,23 @@ public class OrderStatus extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("Request");
+        myFirebaseAuth = FirebaseAuth.getInstance();
 
         recyclerView = (RecyclerView)findViewById(R.id.listOrders);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        loadOrders(Common.currentUser.getPhone());
+        loadOrders(myFirebaseAuth.getCurrentUser().getEmail());
     }
 
-    private void loadOrders(String phone) {
+    private void loadOrders(String email) {
 
         adapter = new FirebaseRecyclerAdapter<Request, OrderViewHolder>(
                 Request.class,
                 R.layout.order_layout,
                 OrderViewHolder.class,
-                reference.orderByChild("phone").equalTo(phone)) {
+                reference.orderByChild("email").equalTo(email)) {
             @Override
             protected void populateViewHolder(OrderViewHolder viewHolder, Request model, int position) {
 
@@ -55,6 +58,7 @@ public class OrderStatus extends AppCompatActivity {
                 viewHolder.txtOrderStatus.setText(convertCOdeToStatus(model.getStatus()));
                 viewHolder.txtOrderPhone.setText(model.getPhone());
                 viewHolder.txtOrderTotal.setText(model.getTotal());
+                viewHolder.txtOrderDate.setText(model.getOrderDate());
                 viewHolder.txtOrderAddress.setText(model.getAddress());
 
 

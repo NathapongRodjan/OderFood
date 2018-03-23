@@ -19,6 +19,7 @@ import com.example.nathapong.oderfood.Database.Database;
 import com.example.nathapong.oderfood.Model.Food;
 import com.example.nathapong.oderfood.Model.Order;
 import com.example.nathapong.oderfood.Model.Rating;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +29,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.stepstone.apprating.AppRatingDialog;
 import com.stepstone.apprating.listener.RatingDialogListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class FoodDetail extends AppCompatActivity implements RatingDialogListener{
 
@@ -45,6 +49,7 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
     FirebaseDatabase database;
     DatabaseReference food;        // For access food in Firebase
     DatabaseReference ratingRef;   // For access rating in Firebase
+    FirebaseAuth myFirebaseAuth;
 
     Food currentFood;
 
@@ -56,6 +61,7 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
         database = FirebaseDatabase.getInstance();
         food = database.getReference("Food");
         ratingRef = database.getReference("Rating");
+        myFirebaseAuth = FirebaseAuth.getInstance();
 
         // Init View Object
         numberButton = (ElegantNumberButton)findViewById(R.id.number_button);
@@ -200,8 +206,13 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
     public void onPositiveButtonClicked(int rateValue, String comment) {
 
         // Get Rating and upload to Firebase
-        final Rating rating = new Rating
-                (Common.currentUser.getPhone(), foodId, String.valueOf(rateValue), comment);
+        final Rating rating = new Rating(
+                                myFirebaseAuth.getCurrentUser().getEmail(),
+                                myFirebaseAuth.getCurrentUser().getDisplayName(),
+                                foodId,
+                                String.valueOf(rateValue),
+                                comment,
+                                getDate());
 
         final String Key_Rating = ratingRef.push().getKey(); // Create auto Key
 
@@ -235,4 +246,25 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
     public void onNegativeButtonClicked() {
 
     }
+
+    private String getDate(){
+
+        String thaiMonths[] = {
+                "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.",
+                "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.",
+                "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."};
+
+        final Calendar c = Calendar.getInstance();
+        int Year = c.get(Calendar.YEAR) + 543;
+        int Month = c.get(Calendar.MONTH);
+        int Day = c.get(Calendar.DAY_OF_MONTH);
+
+        DateFormat df = new SimpleDateFormat("HH:mm");
+        String time = df.format(Calendar.getInstance().getTime()) + " น.";   // Get Time
+
+        String orderDate = Day + " " + thaiMonths[Month] + " " + Year + " เวลา " + time;
+
+        return orderDate;
+    }
+
 }

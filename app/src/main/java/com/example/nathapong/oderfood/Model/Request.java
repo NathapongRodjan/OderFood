@@ -8,12 +8,14 @@ import java.util.List;
 
 public class Request {
 
+    private String email;
     private String phone;
     private String name;
     private String address;
     private String total;
     private String status;
     private String comment;
+    private String orderDate;
     private String latlng;
     private List<Order> foods;   // List of food order
 
@@ -21,15 +23,26 @@ public class Request {
     public Request() {
     }
 
-    public Request(String phone, String name, String address, String total, String status, String comment, String latlng, List<Order> foods) {
+    public Request(String email, String phone, String name, String address, String total, String status, String comment,String orderDate, String latlng, List<Order> foods) {
+        this.email = email;
         this.phone = phone;
         this.name = name;
         this.address = address;
         this.total = total;
         this.status = status;
         this.comment = comment;
+        this.orderDate = orderDate;
         this.latlng = latlng;
+
         this.foods = foods;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhone() {
@@ -78,6 +91,14 @@ public class Request {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
     }
 
     public String getLatlng() {

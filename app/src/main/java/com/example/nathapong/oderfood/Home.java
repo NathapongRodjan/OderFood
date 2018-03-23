@@ -28,6 +28,7 @@ import com.example.nathapong.oderfood.Model.Category;
 import com.example.nathapong.oderfood.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -244,7 +245,11 @@ public class Home extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         fab.setCount(new Database(this).getCountCart());
+    }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        txtFullName.setText(myFirebaseAuth.getCurrentUser().getDisplayName());
     }
 }

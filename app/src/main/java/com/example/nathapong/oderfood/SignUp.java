@@ -33,6 +33,9 @@ public class SignUp extends AppCompatActivity {
     MaterialEditText edtEmail, edtName, edtPassword;
     Button btnSignUp;
 
+    FirebaseDatabase database;
+    DatabaseReference table_user;
+
     private FirebaseAuth myFirebaseAuth;
 
     private String TAG;
@@ -50,8 +53,8 @@ public class SignUp extends AppCompatActivity {
 
         myFirebaseAuth = FirebaseAuth.getInstance();
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference table_user = database.getReference("User");
+        database = FirebaseDatabase.getInstance();
+        table_user = database.getReference("User");
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +177,7 @@ public class SignUp extends AppCompatActivity {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUp.this, "การเข้าสู่ระบบล้มเหลว",
                                     Toast.LENGTH_SHORT).show();
+
                             updateUI(null);
                         }
 
@@ -211,13 +215,15 @@ public class SignUp extends AppCompatActivity {
                 });
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
 
         FirebaseUser currentUser = myFirebaseAuth.getCurrentUser();
-
         updateUI(currentUser);
     }
+
+
 }

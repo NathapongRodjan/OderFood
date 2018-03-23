@@ -26,12 +26,18 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,6 +48,8 @@ public class Cart extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference reference;
+
+    FirebaseAuth myFirebaseAuth;
 
     public TextView txtTotalPrice;
     Button btnPlaceOrder;
@@ -59,6 +67,7 @@ public class Cart extends AppCompatActivity {
         //Firebase
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("Request");
+        myFirebaseAuth = FirebaseAuth.getInstance();
 
         //Init
         recyclerView = (RecyclerView)findViewById(R.id.listCart);
@@ -139,6 +148,7 @@ public class Cart extends AppCompatActivity {
             }
         });
 
+        final MaterialEditText edtPhone = (MaterialEditText)order_address_comment.findViewById(R.id.edtPhone);
         final MaterialEditText edtComment = (MaterialEditText)order_address_comment.findViewById(R.id.edtComment);
 
         alertDialog.setView(order_address_comment);    // Set view to dialog
@@ -148,14 +158,17 @@ public class Cart extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+
                 //Create new Request
                 Request request = new Request(
-                        Common.currentUser.getPhone(),
-                        Common.currentUser.getName(),
+                        myFirebaseAuth.getCurrentUser().getEmail(),
+                        edtPhone.getText().toString(),
+                        myFirebaseAuth.getCurrentUser().getDisplayName(),
                         shippingAddress.getAddress().toString(),
                         txtTotalPrice.getText().toString(),
                         "0",  // Initial status of each order
                         edtComment.getText().toString(),
+                        getOrderDate(),
                         String.format("%s,%s", shippingAddress.getLatLng().latitude, shippingAddress.getLatLng().longitude),
                         cart);
 
@@ -228,6 +241,27 @@ public class Cart extends AppCompatActivity {
 
         txtTotalPrice.setText("");
         loadListFood();  // After update load List Food again
+    }
+
+
+    private String getOrderDate(){
+
+        String thaiMonths[] = {
+                "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.",
+                "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.",
+                "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."};
+
+        final Calendar c = Calendar.getInstance();
+        int Year = c.get(Calendar.YEAR) + 543;
+        int Month = c.get(Calendar.MONTH);
+        int Day = c.get(Calendar.DAY_OF_MONTH);
+
+        DateFormat df = new SimpleDateFormat("HH:mm");
+        String time = df.format(Calendar.getInstance().getTime()) + " น.";   // Get Time
+
+        String orderDate = Day + " " + thaiMonths[Month] + " " + Year + " เวลา " + time;
+
+        return orderDate;
     }
 
 }
