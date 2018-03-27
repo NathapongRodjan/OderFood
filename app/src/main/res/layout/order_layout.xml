@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
-    app:cardElevation="10dp"
-    >
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
         android:layout_gravity="center_vertical"
-        >
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <LinearLayout
-            android:layout_weight="9"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:background="#E0E0E0"
             android:orientation="vertical">
 
             <LinearLayout
@@ -47,12 +47,12 @@
                     android:id="@+id/order_id"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|start"
                     android:text="Order ID"
                     android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:layout_marginRight="10dp"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -79,12 +79,12 @@
                     android:id="@+id/order_status"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|start"
                     android:text="สถานะคำสั่งซื้อ"
                     android:textAllCaps="true"
-                    android:textColor="@android:color/holo_red_light"
-                    android:layout_marginRight="10dp"/>
+                    android:textColor="@android:color/holo_red_light" />
             </LinearLayout>
 
             <LinearLayout
@@ -111,11 +111,11 @@
                     android:id="@+id/order_phone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|start"
                     android:text="0900000000"
-                    android:textAllCaps="true"
-                    android:layout_marginRight="10dp"/>
+                    android:textAllCaps="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -141,18 +141,49 @@
                     android:id="@+id/order_total"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|start"
                     android:text="1000"
-                    android:textAllCaps="true"
-                    android:layout_marginRight="10dp"/>
+                    android:textAllCaps="true" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="0.35"
+                    android:text="วิธีชำระเงิน" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.05"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/order_payment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.6"
+                    android:gravity="center_vertical|start"
+                    android:text="ชำระเงิน"
+                    android:textAllCaps="true" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
@@ -171,19 +202,19 @@
                     android:id="@+id/order_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|start"
                     android:text="วันที่สั่งซื้อ"
-                    android:textAllCaps="true"
-                    android:layout_marginRight="10dp"/>
+                    android:textAllCaps="true" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView4"
@@ -203,18 +234,16 @@
                     android:id="@+id/order_address"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="0.6"
                     android:gravity="center_vertical|start"
                     android:text="Address"
-                    android:textAllCaps="true"
-                    android:layout_marginRight="10dp"/>
+                    android:textAllCaps="true" />
 
             </LinearLayout>
 
 
-
         </LinearLayout>
-
 
 
     </LinearLayout>

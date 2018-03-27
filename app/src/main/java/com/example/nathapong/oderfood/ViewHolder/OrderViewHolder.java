@@ -10,7 +10,7 @@ import com.example.nathapong.oderfood.R;
 
 public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView txtOrderId, txtOrderStatus, txtOrderPhone, txtOrderAddress, txtOrderTotal, txtOrderDate;
+    public TextView txtOrderId, txtOrderStatus, txtOrderPhone, txtOrderAddress, txtOrderTotal, txtOrderDate, txtOrderPayment;
 
     private ItemClickListener itemClickListener;
 
@@ -28,6 +28,7 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
         txtOrderTotal = (TextView)itemView.findViewById(R.id.order_total);
         txtOrderDate = (TextView)itemView.findViewById(R.id.order_date);
         txtOrderAddress = (TextView)itemView.findViewById(R.id.order_address);
+        txtOrderPayment = (TextView)itemView.findViewById(R.id.order_payment);
 
         itemView.setOnClickListener(this);
     }

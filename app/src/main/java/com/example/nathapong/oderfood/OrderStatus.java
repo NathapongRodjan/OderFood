@@ -58,8 +58,9 @@ public class OrderStatus extends AppCompatActivity {
                 viewHolder.txtOrderStatus.setText(convertCOdeToStatus(model.getStatus()));
                 viewHolder.txtOrderPhone.setText(model.getPhone());
                 viewHolder.txtOrderTotal.setText(model.getTotal());
+                viewHolder.txtOrderPayment.setText(model.getPaymentStatus());
                 viewHolder.txtOrderDate.setText(model.getOrderDate());
-                viewHolder.txtOrderAddress.setText(model.getAddress());
+                viewHolder.txtOrderAddress.setText(model.getAddressDetail());
 
 
             }

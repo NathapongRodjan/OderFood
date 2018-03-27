@@ -11,28 +11,35 @@ public class Request {
     private String email;
     private String phone;
     private String name;
+    private String addressDetail;
     private String address;
     private String total;
     private String status;
     private String comment;
     private String orderDate;
     private String latlng;
+    private String paymentStatus;
     private List<Order> foods;   // List of food order
 
 
     public Request() {
     }
 
-    public Request(String email, String phone, String name, String address, String total, String status, String comment,String orderDate, String latlng, List<Order> foods) {
+    public Request(String email, String phone, String name,String addressDatail, String address, String total,
+                   String status, String comment,String orderDate, String latlng, String paymentStatus,
+                   List<Order> foods) {
+
         this.email = email;
         this.phone = phone;
         this.name = name;
+        this.addressDetail = addressDatail;
         this.address = address;
         this.total = total;
         this.status = status;
         this.comment = comment;
         this.orderDate = orderDate;
         this.latlng = latlng;
+        this.paymentStatus = paymentStatus;
 
         this.foods = foods;
     }
@@ -59,6 +66,14 @@ public class Request {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddressDetail() {
+        return addressDetail;
+    }
+
+    public void setAddressDetail(String addressDetail) {
+        this.addressDetail = addressDetail;
     }
 
     public String getAddress() {
@@ -107,6 +122,14 @@ public class Request {
 
     public void setLatlng(String latlng) {
         this.latlng = latlng;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public List<Order> getFoods() {

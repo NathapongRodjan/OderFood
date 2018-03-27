@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.mancj.materialsearchbar.MaterialSearchBar
-        android:id="@+id/searchBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        app:mt_speechMode="false"
-        app:mt_hint="ใส่ชื่อเมนูที่ต้องการ...">
-    </com.mancj.materialsearchbar.MaterialSearchBar>
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/background"
+            app:mt_hint="ใส่ชื่อเมนูที่ต้องการ..."
+            app:mt_speechMode="false" />
 
 
     <android.support.v7.widget.RecyclerView

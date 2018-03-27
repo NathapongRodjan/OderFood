@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000066</color>
-    <color name="colorPrimaryDark">#202020</color>
+    <color name="colorPrimary">#008B00</color>
+    <color name="colorPrimaryDark">#008000</color>
     <color name="colorAccent">#00CC00</color>
 
-    <color name="btnSignUp">#0080FF</color>
-    <color name="btnSignActive">#00CCCC</color>
+    <color name="btnSignUp">#008000</color>
+    <color name="btnSignActive">#008B00</color>
     <color name="btnOK">#0080FF</color>
 
     <color name="overlayBackground">#7f333639</color>
     <color name="overlayActionBar">#0e0d0e</color>
+
+    <color name="background">#008B00</color>
+
+    <color name="normalText">#000000</color>
+    <color name="ratingCommentBackground">#E0E0E0</color>
 
 
 </resources>
