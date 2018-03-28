@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/my_bg"
+
     tools:context="com.example.nathapong.oderfood.SignUp">
 
     <LinearLayout
@@ -17,63 +17,87 @@
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtEmail"
-            android:hint="อีเมล์..."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white"
-            android:textSize="34sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="อีเมล์..."
             android:inputType="textEmailAddress"
-            app:met_baseColor="@android:color/white"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="24sp"
+            app:met_baseColor="@android:color/black"
             app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/white"
-            app:met_singleLineEllipsis="true"
-            />
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_singleLineEllipsis="true" />
+
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtName"
-            android:hint="ชื่อ..."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white"
-            android:textSize="34sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="ชื่อ..."
             android:inputType="textPersonName"
-            app:met_baseColor="@android:color/white"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="24sp"
+            app:met_baseColor="@android:color/black"
             app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/white"
-            app:met_singleLineEllipsis="true"
-            />
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_singleLineEllipsis="true" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtPassword"
-            android:hint="รหัสผ่าน..."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white"
-            android:textSize="34sp"
-            android:inputType="textPersonName"
-            app:met_baseColor="@android:color/white"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="รหัสผ่าน..."
+            android:inputType="textPassword"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="24sp"
+            app:met_baseColor="@android:color/black"
             app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/white"
-            app:met_singleLineEllipsis="true"
-            app:met_minCharacters="6" />
+            app:met_minCharacters="6"
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_singleLineEllipsis="true" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edtConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="ยืนยันรหัสผ่าน..."
+            android:inputType="textPassword"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="24sp"
+            app:met_baseColor="@android:color/black"
+            app:met_floatingLabel="highlight"
+            app:met_minCharacters="6"
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_singleLineEllipsis="true" />
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="50dp"
+            android:layout_weight="1"
+
+            android:background="@color/btnSignUp"
+            android:shadowColor="@android:color/black"
+            android:text="สมัครสมาชิก"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btnSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="8dp"
-        android:layout_weight="1"
-        android:background="@color/btnSignUp"
-        android:shadowColor="@android:color/black"
-        android:text="สมัครสมาชิก"
-        android:textColor="@android:color/white"
-
-        />
-
 
 
 </RelativeLayout>

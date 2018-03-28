@@ -251,16 +251,23 @@ public class FoodList extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        new Database(getBaseContext()).addTOCart(new Order(
-                                adapter.getRef(position).getKey(),
-                                model.getName(),
-                                "1",     // Only quick cart
-                                model.getPrice(),
-                                model.getDiscount(),
-                                model.getImage()
-                        ));
+                        // Check current food is not add to cart
+                        if (new Database(getBaseContext()).isCurrentFoodExistsInCart
+                                (adapter.getRef(position).getKey()) <= 0){
 
-                        Toast.makeText(FoodList.this, "เพิ่มในรถเข็นแล้ว !", Toast.LENGTH_SHORT).show();
+                            new Database(getBaseContext()).addTOCart(new Order(
+                                    adapter.getRef(position).getKey(),
+                                    model.getName(),
+                                    "1",     // Only quick cart
+                                    model.getPrice(),
+                                    model.getDiscount(),
+                                    model.getImage()
+                            ));
+                        }
+                        else {
+                            Toast.makeText(FoodList.this, "ท่านเพิ่มสินค้านี้แล้ว กรุณาตรวจสอบในรถเข็น", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
 

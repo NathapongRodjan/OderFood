@@ -26,6 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SignIn extends AppCompatActivity {
 
     EditText edtEmail, edtPassword;
@@ -149,6 +152,16 @@ public class SignIn extends AppCompatActivity {
             return;
         }
 
+        if (!(validateEmail(email))){
+            edtEmail.setError("รูปแบบอีเมล์ไม่ถูกต้อง !");
+            return;
+        }
+
+        if (password.length() < 6){
+            edtPassword.setError("รหัสผ่านต้องมากกว่า 6 ตัวขึ้นไป");
+            return;
+        }
+
         final ProgressDialog mDialog = new ProgressDialog(SignIn.this);
         mDialog.setMessage("กรุณารอสักครู่......");
         mDialog.show();
@@ -200,6 +213,17 @@ public class SignIn extends AppCompatActivity {
         FirebaseUser currentUser = myFirebaseAuth.getCurrentUser();
 
         updateUI(currentUser);
+    }
+
+    public boolean validateEmail(String email) {
+
+        Pattern pattern;
+        Matcher matcher;
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
+
     }
 
 

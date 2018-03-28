@@ -28,9 +28,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SignUp extends AppCompatActivity {
 
-    MaterialEditText edtEmail, edtName, edtPassword;
+    MaterialEditText edtEmail, edtName, edtPassword, edtConfirmPassword;
     Button btnSignUp;
 
     FirebaseDatabase database;
@@ -48,6 +51,7 @@ public class SignUp extends AppCompatActivity {
         edtEmail = (MaterialEditText)findViewById(R.id.edtEmail);
         edtName = (MaterialEditText)findViewById(R.id.edtName);
         edtPassword = (MaterialEditText)findViewById(R.id.edtPassword);
+        edtConfirmPassword = (MaterialEditText)findViewById(R.id.edtConfirmPassword);
 
         btnSignUp = (Button)findViewById(R.id.btnSignUp);
 
@@ -60,7 +64,8 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                createAccount(edtEmail.getText().toString(), edtPassword.getText().toString());
+                    createAccount(edtEmail.getText().toString(), edtPassword.getText().toString());
+
             }
         });
 
@@ -115,16 +120,16 @@ public class SignUp extends AppCompatActivity {
     private boolean signUpValidateForm() {
         boolean valid = true;
 
-        String name = edtEmail.getText().toString();
-        if (TextUtils.isEmpty(name)) {
+        String email = edtEmail.getText().toString();
+        if (TextUtils.isEmpty(email)) {
             edtEmail.setError("จำเป็นต้องระบุอีเมล์...");
             valid = false;
         } else {
             edtEmail.setError(null);
         }
 
-        String email = edtName.getText().toString();
-        if (TextUtils.isEmpty(email)) {
+        String name = edtName.getText().toString();
+        if (TextUtils.isEmpty(name)) {
             edtName.setError("จำเป็นต้องระบุชื่อ...");
             valid = false;
         } else {
@@ -139,6 +144,14 @@ public class SignUp extends AppCompatActivity {
             edtPassword.setError(null);
         }
 
+        String confirmPassword = edtConfirmPassword.getText().toString();
+        if (TextUtils.isEmpty(confirmPassword)) {
+            edtConfirmPassword.setError("จำเป็นต้องระบุรหัสผ่าน...");
+            valid = false;
+        } else {
+            edtConfirmPassword.setError(null);
+        }
+
         return valid;
     }
 
@@ -149,7 +162,18 @@ public class SignUp extends AppCompatActivity {
         }
 
         if (password.length() < 6){
-            Toast.makeText(SignUp.this,"รหัสผ่านต้องมากกว่า 6 ตัว ขึ้นไป",Toast.LENGTH_SHORT).show();
+            edtPassword.setError("รหัสผ่านต้องมากกว่า 6 ตัวขึ้นไป");
+            return;
+        }
+
+        if (!(validateEmail(email))){
+            edtEmail.setError("รูปแบบอีเมล์ไม่ถูกต้อง !");
+            return;
+        }
+
+        if (!(edtPassword.getText().toString().equals(edtConfirmPassword.getText().toString()))){
+            edtPassword.setError("รหัสผ่านไม่ตรงกัน !");
+            edtConfirmPassword.setError("รหัสผ่านไม่ตรงกัน !");
             return;
         }
 
@@ -175,7 +199,7 @@ public class SignUp extends AppCompatActivity {
                         else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUp.this, "การเข้าสู่ระบบล้มเหลว",
+                            Toast.makeText(SignUp.this, "การสมัครสมาชิกล้มเหลว โปรดลองอีกครั้ง",
                                     Toast.LENGTH_SHORT).show();
 
                             updateUI(null);
@@ -225,5 +249,14 @@ public class SignUp extends AppCompatActivity {
         updateUI(currentUser);
     }
 
+    public boolean validateEmail(String email) {
 
+        Pattern pattern;
+        Matcher matcher;
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
+
+    }
 }

@@ -12,7 +12,7 @@ public class Common {
 
     public static User currentUser;
 
-    public static String DELETE = "Delete";
+    public static String DELETE = "ลบรายการ";
 
 
     // Check the Internet Connection

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -204,10 +205,20 @@ public class Cart extends AppCompatActivity {
 
                 if ((edtName.getText().toString().isEmpty())
                         ||(edtPhone.getText().toString()).isEmpty()
-                        ||(edtAddressDetail.getText().toString()).isEmpty()
-                        || shippingAddress == null){
+                        ||(edtAddressDetail.getText().toString()).isEmpty()) {
 
-                    Toast.makeText(Cart.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();
+                    if (edtName.getText().toString().isEmpty()) {
+                        edtName.setError("กรุณากรอกชื่อลูกค้า !");
+                    }
+                    if (edtPhone.getText().toString().isEmpty()) {
+                        edtPhone.setError("กรุณากรอกเบอร์โทรศัพท์ !");
+                    }
+                    if (edtAddressDetail.getText().toString().isEmpty()) {
+                        edtAddressDetail.setError("กรุณากรอกที่อยู่ !");
+                    }
+                }
+                else if (shippingAddress == null){
+                    Toast.makeText(Cart.this, "กรุณาระบุสถานที่ใกล้เคียง", Toast.LENGTH_SHORT).show();
                 }
                 else {
 
@@ -397,4 +408,5 @@ public class Cart extends AppCompatActivity {
                 super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
 }

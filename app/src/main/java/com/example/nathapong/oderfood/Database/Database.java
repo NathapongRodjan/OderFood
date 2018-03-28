@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.widget.Toast;
 
+import com.example.nathapong.oderfood.FoodDetail;
 import com.example.nathapong.oderfood.Model.Order;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -57,19 +59,20 @@ public class Database extends SQLiteAssetHelper{
 
     public void addTOCart(Order order){
 
-        SQLiteDatabase db = getReadableDatabase();
+            SQLiteDatabase db = getReadableDatabase();
 
-        String query = String.format("INSERT INTO OrderDetail" +
-                        "(ProductId,ProductName,Quantity,Price,Discount,Image) " +
-                        "VALUES('%s','%s','%s','%s','%s','%s');",
+            String query = String.format("INSERT INTO OrderDetail" +
+                            "(ProductId,ProductName,Quantity,Price,Discount,Image) " +
+                            "VALUES('%s','%s','%s','%s','%s','%s');",
 
-                order.getProductId(),
-                order.getProductName(),
-                order.getQuantity(),
-                order.getPrice(),
-                order.getDiscount(),
-                order.getImage());
-        db.execSQL(query);
+                            order.getProductId(),
+                            order.getProductName(),
+                            order.getQuantity(),
+                            order.getPrice(),
+                            order.getDiscount(),
+                            order.getImage());
+
+            db.execSQL(query);
     }
 
     public void cleanCart(){
@@ -83,7 +86,7 @@ public class Database extends SQLiteAssetHelper{
     public void updateCart(Order order) {
 
         SQLiteDatabase db = getReadableDatabase();
-        String query = String.format("UPDATE OrderDetail SET Quantity= %s WHERE ID = %d", order.getQuantity(),order.getID());
+        String query = String.format("UPDATE OrderDetail SET Quantity = %s WHERE ID = %d", order.getQuantity(),order.getID());
         db.execSQL(query);
     }
 
@@ -93,6 +96,23 @@ public class Database extends SQLiteAssetHelper{
 
         SQLiteDatabase db = getReadableDatabase();
         String query = String.format("SELECT COUNT(*) FROM OrderDetail");
+        Cursor cursor = db.rawQuery(query,null);
+
+        if (cursor.moveToFirst()){
+
+            do{
+                count = cursor.getInt(0);
+            }
+            while (cursor.moveToNext());
+        }
+        return count;
+    }
+
+    public int isCurrentFoodExistsInCart(String productId) {
+
+        int count = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        String query = String.format("SELECT COUNT(*) FROM OrderDetail WHERE ProductId = '%s'", productId);
         Cursor cursor = db.rawQuery(query,null);
 
         if (cursor.moveToFirst()){

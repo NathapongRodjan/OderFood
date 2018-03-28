@@ -86,17 +86,28 @@ public class FoodDetail extends AppCompatActivity implements RatingDialogListene
         btnCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Database(getBaseContext()).addTOCart(new Order(
-                        foodId,
-                        currentFood.getName(),
-                        numberButton.getNumber(),
-                        currentFood.getPrice(),
-                        currentFood.getDiscount(),
-                        currentFood.getImage()
-                ));
 
-                btnCart.setCount(new Database(FoodDetail.this).getCountCart());
-                Toast.makeText(FoodDetail.this, "เพิ่มในรถเข็นแล้ว !", Toast.LENGTH_SHORT).show();
+                Order order = new Order( foodId,
+                                         currentFood.getName(),
+                                         numberButton.getNumber(),
+                                         currentFood.getPrice(),
+                                         currentFood.getDiscount(),
+                                         currentFood.getImage()  );
+
+                // Check current food is not add to cart
+                if (new Database(getBaseContext()).isCurrentFoodExistsInCart(foodId) <= 0){
+
+                    new Database(getBaseContext()).addTOCart(order);
+
+                    numberButton.setNumber("1");
+                    btnCart.setCount(new Database(FoodDetail.this).getCountCart());
+
+                }
+                else {
+                    Toast.makeText(FoodDetail.this, "ท่านเพิ่มสินค้านี้แล้ว กรุณาตรวจสอบในรถเข็น", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
 
