@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,10 +27,13 @@ import com.example.nathapong.oderfood.Database.Database;
 import com.example.nathapong.oderfood.Model.Order;
 import com.example.nathapong.oderfood.Model.Request;
 import com.example.nathapong.oderfood.ViewHolder.CartAdapter;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -65,13 +69,18 @@ public class Cart extends AppCompatActivity {
     List<Order> cart = new ArrayList<>();
     CartAdapter adapter;
 
-    Place shippingAddress;
-
     int paymentSelected = 0;  // 1 = Credit , 2 = Money
     boolean isCreditCardSucceed = false;
 
     private static final String OMISE_PKEY = "pkey_test_5bdi3tzhhnw9apdgepf";
     private static final int REQUEST_CC = 100;
+
+    private static final int PLACE_PICKER_REQUEST = 99;
+
+    TextView txtPlace;
+    Double latitude, longitude;
+
+    ImageView imgCheckCredit;
 
 
     @Override
@@ -133,34 +142,6 @@ public class Cart extends AppCompatActivity {
         LayoutInflater inflater = this.getLayoutInflater();
         View order_address_comment = inflater.inflate(R.layout.order_address_comment,null);
 
-        final PlaceAutocompleteFragment edtAddress =(PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-        // Hide search icon before fragment
-        edtAddress.getView().findViewById(R.id.place_autocomplete_search_button).setVisibility(View.GONE);
-
-        // Set Hint for Autocomplete Edit Text
-        ((EditText)edtAddress.getView().findViewById(R.id.place_autocomplete_search_input))
-                .setHint("แตะเพื่อระบุสถานที่ใกล้เคียง");
-
-        // Set Text Size
-        ((EditText)edtAddress.getView().findViewById(R.id.place_autocomplete_search_input))
-                .setTextSize(16);
-
-        // Get Address from place autocomplete
-        edtAddress.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-
-                shippingAddress = place;
-            }
-
-            @Override
-            public void onError(Status status) {
-
-                Log.e("ERROR", status.getStatusMessage());
-            }
-        });
-
         final MaterialEditText edtName = (MaterialEditText)order_address_comment.findViewById(R.id.edtName);
         final MaterialEditText edtPhone = (MaterialEditText)order_address_comment.findViewById(R.id.edtPhone);
         final MaterialEditText edtAddressDetail = (MaterialEditText)order_address_comment.findViewById(R.id.edtAddressDetail);
@@ -170,10 +151,12 @@ public class Cart extends AppCompatActivity {
         final RadioButton rdbMoney = (RadioButton)order_address_comment.findViewById(R.id.rdbMoney);
         final Button btnOK = (Button) order_address_comment.findViewById(R.id.btnOK);
         final Button btnCancel = (Button) order_address_comment.findViewById(R.id.btnCancel);
+        imgCheckCredit = (ImageView) order_address_comment.findViewById(R.id.imgCheckCredit);
+
+        txtPlace = (TextView) order_address_comment.findViewById(R.id.txtPlace);
+        final Button btnPlace = order_address_comment.findViewById(R.id.btnPlace);
 
         edtName.setText(myFirebaseAuth.getCurrentUser().getDisplayName());
-
-
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -181,9 +164,16 @@ public class Cart extends AppCompatActivity {
                 switch (radioButtonId){
                     case R.id.rdbCredit :
                         paymentSelected = 1;
+                        if (isCreditCardSucceed){
+                            imgCheckCredit.setImageResource(R.drawable.ic_check_circle_black_24dp);
+                        }
+                        else {
+                            imgCheckCredit.setImageResource(R.drawable.ic_cancel_black_24dp);
+                        }
                         break;
                     case R.id.rdbMoney :
                         paymentSelected = 2;
+                        imgCheckCredit.setImageResource(android.R.color.transparent);
                         break;
                     default :
                         paymentSelected = 0;
@@ -198,6 +188,23 @@ public class Cart extends AppCompatActivity {
         //alertDialog.show();
         final AlertDialog showDialog = alertDialog.show();   // Show Dialog when press place order button
 
+        btnPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    startActivityForResult(builder.build(Cart.this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
 
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +212,8 @@ public class Cart extends AppCompatActivity {
 
                 if ((edtName.getText().toString().isEmpty())
                         ||(edtPhone.getText().toString()).isEmpty()
-                        ||(edtAddressDetail.getText().toString()).isEmpty()) {
+                        ||(edtAddressDetail.getText().toString()).isEmpty()
+                        ||(txtPlace.getText().toString().isEmpty())){
 
                     if (edtName.getText().toString().isEmpty()) {
                         edtName.setError("กรุณากรอกชื่อลูกค้า !");
@@ -216,10 +224,11 @@ public class Cart extends AppCompatActivity {
                     if (edtAddressDetail.getText().toString().isEmpty()) {
                         edtAddressDetail.setError("กรุณากรอกที่อยู่ !");
                     }
+                    if (txtPlace.getText().toString().isEmpty()) {
+                        txtPlace.setError("กรุณาระบุตำแหน่ง !");
+                    }
                 }
-                else if (shippingAddress == null){
-                    Toast.makeText(Cart.this, "กรุณาระบุสถานที่ใกล้เคียง", Toast.LENGTH_SHORT).show();
-                }
+
                 else {
 
                     switch (paymentSelected){
@@ -238,13 +247,13 @@ public class Cart extends AppCompatActivity {
                                         edtPhone.getText().toString(),
                                         edtName.getText().toString(),
                                         edtAddressDetail.getText().toString(),
-                                        shippingAddress.getAddress().toString(),
                                         txtTotalPrice.getText().toString(),
                                         "0",  // Initial status of each order
                                         edtComment.getText().toString(),
                                         getOrderDate(),
-                                        String.format("%s,%s", shippingAddress.getLatLng().latitude, shippingAddress.getLatLng().longitude),
                                         "ชำระด้วยบัตรเครดิต",
+                                        latitude,
+                                        longitude,
                                         cart);
 
                                 reference.child(String.valueOf(System.currentTimeMillis()))
@@ -266,13 +275,13 @@ public class Cart extends AppCompatActivity {
                                     edtPhone.getText().toString(),
                                     edtName.getText().toString(),
                                     edtAddressDetail.getText().toString(),
-                                    shippingAddress.getAddress().toString(),
                                     txtTotalPrice.getText().toString(),
                                     "0",  // Initial status of each order
                                     edtComment.getText().toString(),
                                     getOrderDate(),
-                                    String.format("%s,%s", shippingAddress.getLatLng().latitude, shippingAddress.getLatLng().longitude),
                                     "ชำระด้วยเงินสด",
+                                    latitude,
+                                    longitude,
                                     cart);
 
                             reference.child(String.valueOf(System.currentTimeMillis()))
@@ -292,27 +301,9 @@ public class Cart extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             showDialog.dismiss();
-
-                // Remove Fragment when close dialog for prevent app crash
-                getFragmentManager().beginTransaction()
-                        .remove(getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment))
-                        .commit();
             }
         });
-
-        // Remove Fragment when close dialog for prevent app crash when tap back press button
-        showDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-
-                getFragmentManager().beginTransaction()
-                        .remove(getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment))
-                        .commit();
-            }
-        });
-
     }
 
     public void loadListFood() {
@@ -401,7 +392,36 @@ public class Cart extends AppCompatActivity {
 
                 Token token = data.getParcelableExtra(CreditCardActivity.EXTRA_TOKEN_OBJECT);
                 isCreditCardSucceed = true;   // Succeed
+                imgCheckCredit.setImageResource(R.drawable.ic_check_circle_black_24dp);
                 Toast.makeText(this, "ตรวจสอบบัตรเครดิตเรียบร้อย", Toast.LENGTH_SHORT).show();
+                break;
+
+            case PLACE_PICKER_REQUEST :
+
+                if (resultCode == RESULT_OK) {
+                    Place place = PlacePicker.getPlace(data, this);
+                    latitude = place.getLatLng().latitude;
+                    longitude = place.getLatLng().longitude;
+                    txtPlace.setError(null);
+                    txtPlace.setText(String.format("%s", place.getName()));
+
+                    /*StringBuilder stBuilder = new StringBuilder();
+                    String placename = String.format("%s", place.getName());
+                    String latitude = String.valueOf(place.getLatLng().latitude);
+                    String longitude = String.valueOf(place.getLatLng().longitude);
+                    String address = String.format("%s", place.getAddress());
+                    stBuilder.append("Name: ");
+                    stBuilder.append(placename);
+                    stBuilder.append("\n");
+                    stBuilder.append("Latitude: ");
+                    stBuilder.append(latitude);
+                    stBuilder.append("\n");
+                    stBuilder.append("Logitude: ");
+                    stBuilder.append(longitude);
+                    stBuilder.append("\n");
+                    stBuilder.append("Address: ");
+                    stBuilder.append(address);*/
+                }
                 break;
 
             default:

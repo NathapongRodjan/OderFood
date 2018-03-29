@@ -12,35 +12,32 @@ public class Request {
     private String phone;
     private String name;
     private String addressDetail;
-    private String address;
     private String total;
     private String status;
     private String comment;
     private String orderDate;
-    private String latlng;
     private String paymentStatus;
+    private double latitude, longitude;
     private List<Order> foods;   // List of food order
 
 
     public Request() {
     }
 
-    public Request(String email, String phone, String name,String addressDatail, String address, String total,
-                   String status, String comment,String orderDate, String latlng, String paymentStatus,
-                   List<Order> foods) {
-
+    public Request(String email, String phone, String name, String addressDetail, String total,
+                   String status, String comment, String orderDate, String paymentStatus, double
+                           latitude, double longitude, List<Order> foods) {
         this.email = email;
         this.phone = phone;
         this.name = name;
-        this.addressDetail = addressDatail;
-        this.address = address;
+        this.addressDetail = addressDetail;
         this.total = total;
         this.status = status;
         this.comment = comment;
         this.orderDate = orderDate;
-        this.latlng = latlng;
         this.paymentStatus = paymentStatus;
-
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.foods = foods;
     }
 
@@ -76,14 +73,6 @@ public class Request {
         this.addressDetail = addressDetail;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getTotal() {
         return total;
     }
@@ -116,20 +105,28 @@ public class Request {
         this.orderDate = orderDate;
     }
 
-    public String getLatlng() {
-        return latlng;
-    }
-
-    public void setLatlng(String latlng) {
-        this.latlng = latlng;
-    }
-
     public String getPaymentStatus() {
         return paymentStatus;
     }
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public List<Order> getFoods() {
