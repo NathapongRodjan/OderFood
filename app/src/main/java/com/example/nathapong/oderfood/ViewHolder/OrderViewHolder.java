@@ -12,12 +12,9 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     public TextView txtOrderId, txtOrderStatus, txtOrderPhone, txtOrderAddress, txtOrderTotal, txtOrderDate, txtOrderPayment;
 
+    // Interface
     private ItemClickListener itemClickListener;
 
-
-    public void setItemClickListener(ItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
 
     public OrderViewHolder(View itemView) {
         super(itemView);
@@ -33,9 +30,13 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
         itemView.setOnClickListener(this);
     }
 
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
     @Override
     public void onClick(View v) {
 
-        //itemClickListener.onClick(v, getAdapterPosition(),false);
+        itemClickListener.onClick(v, getAdapterPosition(),false);
     }
 }

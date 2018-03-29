@@ -1,11 +1,14 @@
 package com.example.nathapong.oderfood;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.example.nathapong.oderfood.Common.Common;
+import com.example.nathapong.oderfood.Interface.ItemClickListener;
 import com.example.nathapong.oderfood.Model.Request;
 import com.example.nathapong.oderfood.ViewHolder.OrderViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -62,7 +65,16 @@ public class OrderStatus extends AppCompatActivity {
                 viewHolder.txtOrderDate.setText(model.getOrderDate());
                 viewHolder.txtOrderAddress.setText(model.getAddressDetail());
 
+                viewHolder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
 
+                        Intent mapIntent = new Intent(OrderStatus.this, MapsActivity.class);
+
+                        mapIntent.putExtra("requestId", adapter.getRef(position).getKey());
+                        startActivity(mapIntent);
+                    }
+                });
             }
         };
 
