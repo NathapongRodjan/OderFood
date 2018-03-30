@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'Nathapong.dev'
+            keyPassword '900032523'
+            storeFile file('D:/AndroidStudioProjects/APK/Nathapong.jks')
+            storePassword '900032523'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.nathapong.oderfood"
@@ -14,12 +22,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.releaseConfig
         }
     }
 }
 
 dependencies {
-
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -28,16 +37,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
     // Google Services
     implementation 'com.google.android.gms:play-services-places:11.0.4'
-
     // Firebase
     implementation 'com.google.firebase:firebase-core:11.0.4'
     implementation 'com.google.firebase:firebase-database:11.0.4'
     implementation 'com.firebaseui:firebase-ui-database:1.2.0'
     implementation 'com.google.firebase:firebase-auth:11.0.4'
-
     // Material
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'com.android.support:recyclerview-v7:27.0.2'
@@ -47,19 +53,15 @@ dependencies {
     implementation 'com.github.mancj:MaterialSearchBar:0.7.1'
     implementation 'com.stepstone.apprating:app-rating:2.0.0'
     implementation 'com.github.andremion:counterfab:1.0.1'
-
     // Glide
     implementation('com.github.bumptech.glide:glide:4.6.1') {
         exclude group: "com.android.support"
     }
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
-
     // SQLite
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
-
     // Facebook SDK
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
-
     // Omise SDK
     implementation 'co.omise:omise-android:2.6.4'
 }

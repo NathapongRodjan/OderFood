@@ -1,6 +1,7 @@
 package com.example.nathapong.oderfood;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -75,14 +76,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.snippet(address);
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
-                Marker marker = mMap.addMarker(markerOptions);
-
+                final Marker marker = mMap.addMarker(markerOptions);
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15.0f));
+
+                new CountDownTimer(3000,1000){
+                    public void onTick(long millisUntilFinished) {
+                       // null
+                    }
+                    public void onFinish() {
+                        marker.showInfoWindow();
+                    }
+                }.start();
             }
+
+
             @Override
-
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
