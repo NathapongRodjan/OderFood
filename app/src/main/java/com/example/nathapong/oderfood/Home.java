@@ -222,7 +222,11 @@ public class Home extends AppCompatActivity
             Intent orderIntent = new Intent(Home.this, OrderStatus.class);
             startActivity(orderIntent);
 
-        } else if (id == R.id.nav_log_out) {
+        } else if (id == R.id.nav_retrofit) {
+            Intent retrofitIntent = new Intent(Home.this, RetrofitActivity.class);
+            startActivity(retrofitIntent);
+
+        }else if (id == R.id.nav_log_out) {
 
             //Intent signInIntent = new Intent(Home.this, SignIn.class);
             //signInIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
