@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nathapong.oderfood.ItemDecoration.VerticalSpaceItemDecoration;
 import com.example.nathapong.oderfood.JsonModel.Category;
 import com.example.nathapong.oderfood.R;
 
@@ -47,6 +48,7 @@ public class RecyclerViewDataAdapter
         itemRowHolder.recycler_view_list.setHasFixedSize(true);
         itemRowHolder.recycler_view_list.setLayoutManager
                 (new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        itemRowHolder.recycler_view_list.addItemDecoration(new VerticalSpaceItemDecoration(0,5,5,0));
         itemRowHolder.recycler_view_list.setAdapter(itemListDataAdapter);
 
         itemRowHolder.btnMore.setOnClickListener(new View.OnClickListener() {

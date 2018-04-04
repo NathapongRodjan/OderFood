@@ -38,6 +38,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Si
         FoodItem singleItem = itemsList.get(i);
 
         holder.tvTitle.setText(singleItem.getName());
+        holder.tvDescription.setText(singleItem.getShotDetail());
 
         Glide.with(mContext)
                 .load(singleItem.getImage())
@@ -52,7 +53,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Si
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
 
         protected TextView tvTitle;
-
+        protected TextView tvDescription;
         protected ImageView itemImage;
 
 
@@ -60,8 +61,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Si
             super(view);
 
             this.tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+            this.tvDescription = (TextView) view.findViewById(R.id.tvDescription);
             this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
-
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

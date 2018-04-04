@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.nathapong.oderfood.ItemDecoration.VerticalSpaceItemDecoration;
 import com.example.nathapong.oderfood.JsonApi.Client;
 import com.example.nathapong.oderfood.JsonApi.Service;
 import com.example.nathapong.oderfood.JsonModel.Category;
@@ -45,6 +46,8 @@ public class RetrofitActivity extends AppCompatActivity {
         my_recycler_view.setLayoutManager
                 (new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
+        my_recycler_view.addItemDecoration(new VerticalSpaceItemDecoration(50,20,20,50));
+
         my_recycler_view.setAdapter(adapter);
     }
 
@@ -63,7 +66,7 @@ public class RetrofitActivity extends AppCompatActivity {
 
                 ArrayList<Category> value = list.getCategoryList();
 
-                String oldtxt = "";
+                int count = 0;
 
                 for (int i = 0; i < value.size(); i++){
 
@@ -80,6 +83,7 @@ public class RetrofitActivity extends AppCompatActivity {
                         String image = value.get(i).getItem().get(x).getImage();
 
                         foodItems.add(new FoodItem(name, shotDetail, image));
+                        count++;
                     }
                     categoryData.setItem(foodItems);
                     allCategory.add(categoryData);
