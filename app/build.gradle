@@ -26,6 +26,10 @@ android {
             signingConfig signingConfigs.releaseConfig
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -68,6 +72,9 @@ dependencies {
     // Retrofit 2
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    // Snap
+    implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
 }
 
 

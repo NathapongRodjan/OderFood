@@ -3,6 +3,7 @@ package com.example.nathapong.oderfood.JsonModel;
 import java.util.ArrayList;
 
 public class Category {
+
     private String categoryName;
     private ArrayList<FoodItem> item;
 

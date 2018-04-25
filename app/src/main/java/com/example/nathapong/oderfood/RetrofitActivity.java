@@ -1,10 +1,14 @@
 package com.example.nathapong.oderfood;
 
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.nathapong.oderfood.ItemDecoration.VerticalSpaceItemDecoration;
@@ -14,6 +18,7 @@ import com.example.nathapong.oderfood.JsonModel.Category;
 import com.example.nathapong.oderfood.JsonModel.DataList;
 import com.example.nathapong.oderfood.JsonModel.FoodItem;
 import com.example.nathapong.oderfood.RetrofitAdapter.RecyclerViewDataAdapter;
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.ArrayList;
 
@@ -24,7 +29,10 @@ import retrofit2.Response;
 public class RetrofitActivity extends AppCompatActivity {
 
     ArrayList<Category> allCategory;
+    RecyclerView my_recycler_view;
     TextView txtText;
+
+    private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +45,13 @@ public class RetrofitActivity extends AppCompatActivity {
 
         loadFood();
 
-        RecyclerView my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
+        my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         my_recycler_view.setHasFixedSize(true);
 
         RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, allCategory);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
 
         my_recycler_view.setLayoutManager
                 (new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -66,8 +76,6 @@ public class RetrofitActivity extends AppCompatActivity {
 
                 ArrayList<Category> value = list.getCategoryList();
 
-                int count = 0;
-
                 for (int i = 0; i < value.size(); i++){
 
                     Category categoryData = new Category();
@@ -83,10 +91,12 @@ public class RetrofitActivity extends AppCompatActivity {
                         String image = value.get(i).getItem().get(x).getImage();
 
                         foodItems.add(new FoodItem(name, shotDetail, image));
-                        count++;
                     }
-                    categoryData.setItem(foodItems);
-                    allCategory.add(categoryData);
+
+                    if (foodItems.size() >= 1) {
+                        categoryData.setItem(foodItems);
+                        allCategory.add(categoryData);
+                    }
                 }
 
                 txtText.setText("\n");
@@ -99,6 +109,4 @@ public class RetrofitActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

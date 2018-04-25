@@ -40,7 +40,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="more"
+                android:text="@string/btnMore"
                 android:textSize="18sp"
                 android:background="@android:color/transparent"
                 android:textColor="@color/colorPrimaryDark" />

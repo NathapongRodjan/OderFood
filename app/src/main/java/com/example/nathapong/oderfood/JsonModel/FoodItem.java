@@ -1,6 +1,9 @@
 package com.example.nathapong.oderfood.JsonModel;
 
-public class FoodItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class FoodItem implements Parcelable{
 
     private String name;
     private String shotDetail;
@@ -11,6 +14,24 @@ public class FoodItem {
         this.shotDetail = shotDetail;
         this.image = image;
     }
+
+    protected FoodItem(Parcel in) {
+        name = in.readString();
+        shotDetail = in.readString();
+        image = in.readString();
+    }
+
+    public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
+        @Override
+        public FoodItem createFromParcel(Parcel in) {
+            return new FoodItem(in);
+        }
+
+        @Override
+        public FoodItem[] newArray(int size) {
+            return new FoodItem[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -34,5 +55,17 @@ public class FoodItem {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(shotDetail);
+        dest.writeString(image);
     }
 }
